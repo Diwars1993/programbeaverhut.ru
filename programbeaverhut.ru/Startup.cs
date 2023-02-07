@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -8,20 +7,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using programbeaverhut.ru.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 
 namespace programbeaverhut.ru
 {
     public class Startup
     {
-        private readonly ILogger _logger;
-
-        public Startup(IConfiguration configuration, ILogger logger)
+        public Startup(IConfiguration configuration)
         {
-            _logger = logger;
             Configuration = configuration;
         }
 
@@ -34,7 +26,7 @@ namespace programbeaverhut.ru
             services.AddDbContext<PbhContext>(options =>
                 {
                     var connectionString = Configuration.GetConnectionString("DefaultConnection");
-                    _logger.LogInformation($"Connection string is {connectionString}");
+                    Console.WriteLine($"Connection string is {connectionString}");
                     options.UseSqlServer(connectionString);
                 }
             );
