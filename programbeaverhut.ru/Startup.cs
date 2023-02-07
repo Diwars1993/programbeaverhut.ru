@@ -11,13 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace programbeaverhut.ru
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly ILogger _logger;
+
+        public Startup(IConfiguration configuration, ILogger logger)
         {
+            _logger = logger;
             Configuration = configuration;
         }
 
@@ -26,13 +30,18 @@ namespace programbeaverhut.ru
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Этот участок кода взять от сюда https://metanit.com/sharp/aspnet5/16.2.php
+            // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ https://metanit.com/sharp/aspnet5/16.2.php
             services.AddDbContext<PbhContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
- 
+                {
+                    var connectionString = Configuration.GetConnectionString("DefaultConnection");
+                    _logger.LogInformation($"Connection string is {connectionString}");
+                    options.UseSqlServer(connectionString);
+                }
+            );
+
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<PbhContext>()
-                 .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders();
             services.AddControllersWithViews();
         }
 
@@ -55,7 +64,7 @@ namespace programbeaverhut.ru
 
             app.UseRouting();
 
-            app.UseAuthentication();    // подключение аутентификации
+            app.UseAuthentication(); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -64,7 +73,6 @@ namespace programbeaverhut.ru
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}/{id2?}");
             });
-
         }
     }
 }
