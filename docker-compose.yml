@@ -12,7 +12,7 @@ services:
   programbeaverhut:
     build:
       context: .
-      dockerfile: programbeaverhut.ru/Dockerfile
+      dockerfile: Dockerfile
     container_name: "programbeaverhut"
     environment:
       - ASPNETCORE_ENVIRONMENT=production
